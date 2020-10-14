@@ -1,0 +1,67 @@
+name: Spiski-prod
+
+on: [ pull_request ]
+
+jobs:
+  lint_and_test:
+
+    runs-on: ubuntu-latest
+
+    env:
+      SECRET_KEY: change_me
+      DATABASE: postgres
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: pip install -r app/requirements/base.txt -r app/requirements/dev.txt
+      - name: Lint with mypy
+        run: mypy app/
+      - name: Lint with black
+        run: black --check --diff app/
+      - name: Test
+        run: |
+          cd app
+          python manage.py test cage
+      - name: Test migrations
+        run: |
+          cd app
+          python manage.py makemigrations --check --dry-run
+
+  build_docker:
+
+    runs-on: ubuntu-latest
+
+    env:
+      SQL_ENGINE: django.db.backends.postgresql
+      SQL_DATABASE: spiski
+      SQL_USER: spiski_user
+      SQL_PASSWORD: spiski123
+      SQL_HOST: db
+      SQL_PORT: 5432
+      DATABASE: postgres
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          docker-compose -f docker-compose.prod.yml up -d web
+
+          echo "Should be up within 4s"
+
+          RETRIES=5
+          until [ $RETRIES -eq "0" ]
+          do
+            if curl -sS http://localhost:8002/healthcheck; then
+              exit 0
+            fi
+            ((RETRIES=RETRIES-1))
+            sleep 1
+          done
+
+          echo "Couldn't start within 4s"
+          exit 1
