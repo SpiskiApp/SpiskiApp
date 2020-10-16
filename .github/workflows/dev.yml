@@ -57,7 +57,7 @@ jobs:
           until [ $RETRIES -eq "0" ]
           do
             docker ps
-            if curl -sS http://localhost:8008/healthcheck; then
+            if curl -sS http://localhost:8000/healthcheck; then
               exit 0
             fi
             ((RETRIES=RETRIES-1))
