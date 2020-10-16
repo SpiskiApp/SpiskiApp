@@ -56,7 +56,7 @@ jobs:
           RETRIES=5
           until [ $RETRIES -eq "0" ]
           do
-            if curl -sS http://localhost:8002/healthcheck; then
+            if curl -sS http://localhost/healthcheck; then
               exit 0
             fi
             ((RETRIES=RETRIES-1))
