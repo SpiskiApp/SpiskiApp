@@ -50,6 +50,7 @@ jobs:
       - name: Build
         run: |
           docker-compose -f docker-compose.prod.yml up -d web
+          docker-compose -f docker-compose.prod.yml up -d nginx
 
           echo "Should be up within 4s"
 
