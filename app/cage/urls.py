@@ -1,7 +1,5 @@
-from django.conf.urls import url
-
 from cage import views
-
+from django.conf.urls import url
 
 urlpatterns = (
     url("inmates/?", views.ListImportInmatesView.as_view(), name="inmates_list"),

@@ -1,6 +1,5 @@
-from rest_framework.serializers import ModelSerializer
-
 from cage.models import Inmate, List, ListItem, Prison
+from rest_framework.serializers import ModelSerializer
 
 
 class InmateSerializer(ModelSerializer):
