@@ -1,0 +1,14 @@
+[
+  {
+    "model": "auth.group",
+    "fields": {
+      "name": "volunteer",
+      "permissions": [
+        33,
+        36,
+        41,
+        44
+      ]
+    }
+  }
+]

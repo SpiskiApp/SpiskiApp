@@ -17,10 +17,12 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include, url
 
+from cage.support.admin import volunteer_admin
 from .views import healthcheck
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("volunteer_admin/", volunteer_admin.urls),
     url(r"^api/v1/cage/", include("cage.urls")),
     url(r"healthcheck/?", healthcheck, name="healthcheck"),
 ]

@@ -20,13 +20,18 @@ jobs:
       - name: Install dependencies
         run: pip install -r app/requirements/base.txt -r app/requirements/dev.txt
       - name: Lint with mypy
-        run: mypy app/
+        run: mypy app/app/ app/auth/ app/cage/
       - name: Lint with black
         run: black --check --diff app/
       - name: Test
         run: |
           cd app
           python manage.py test cage
+      - name: Migrate db
+        run: |
+          cd app
+          python manage.py migrate
+          python manage.py loaddata --app cage groups
       - name: Test migrations
         run: |
           cd app
