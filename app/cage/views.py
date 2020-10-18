@@ -1,7 +1,6 @@
-from rest_framework.generics import CreateAPIView, ListCreateAPIView
-
-from cage.models import Inmate, ListItem, List, Prison
+from cage.models import Inmate, List, ListItem, Prison
 from cage.serializers import InmateSerializer, ListSerializer
+from rest_framework.generics import CreateAPIView, ListCreateAPIView
 
 
 class ListImportInmatesView(ListCreateAPIView):

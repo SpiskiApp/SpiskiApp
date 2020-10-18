@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
 
+from cage.models import Inmate, List, ListItem, Prison
 from factory import LazyFunction, Sequence, SubFactory
 from factory.django import DjangoModelFactory
-
-from cage.models import Inmate, ListItem, List, Prison
 
 
 class InmateFactory(DjangoModelFactory):

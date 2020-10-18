@@ -23,6 +23,8 @@ jobs:
         run: mypy app/app/ app/auth/ app/cage/
       - name: Lint with black
         run: black --check --diff app/
+      - name: Lint with isort
+        run: isort -c app/
       - name: Test
         run: |
           cd app

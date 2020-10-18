@@ -1,14 +1,13 @@
 from typing import Callable, Optional, Sequence
 
+from auth.constants import UserGroup
+from cage.models import List, ListItem
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import Group
 from django.db import models
 from django.urls import reverse
 from django.utils.html import format_html
-
-from auth.constants import UserGroup
-from cage.models import List, ListItem
 
 
 class VolunteerAdminSite(AdminSite):

@@ -1,11 +1,11 @@
 from copy import copy
 from datetime import datetime, timedelta
 
+from cage.models import Inmate
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from cage.models import Inmate
 from .factories import InmateFactory
 
 

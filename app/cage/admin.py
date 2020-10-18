@@ -1,7 +1,5 @@
+from cage.models import Detention, Imprisonment, Inmate, List, ListItem, Prison
 from django.contrib import admin
-
-from cage.models import Detention, Inmate, Imprisonment, List, ListItem, Prison
-
 
 admin.site.register(ListItem, admin.ModelAdmin)
 admin.site.register(List, admin.ModelAdmin)

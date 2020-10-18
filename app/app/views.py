@@ -1,6 +1,6 @@
 from django.db import connections
 from django.db.utils import OperationalError
-from django.http import HttpRequest, HttpResponseServerError, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseServerError
 
 
 def healthcheck(request: HttpRequest) -> HttpResponse:
