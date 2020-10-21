@@ -17,19 +17,37 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Build
+      - name: Publish app
         run: |
 
           echo "Login to docker hub"
-          echo "$DEPLOY_TOKEN" | docker login --username "$DEPLOY_USERNAME" --password-stdin
+          docker login --username "$DEPLOY_USERNAME" -p "$DEPLOY_TOKEN"
 
           # $GITHUB_REF is in the form of 'refs/tags/<tag>'
           DEPLOY_TAG=$(echo "$GITHUB_REF" | awk -F "/" '{print($3)}')
-          IMAGE_TAG=$DEPLOY_USERNAME/$DEPLOY_REPO:$DEPLOY_TAG
+          IMAGE_TAG=$DEPLOY_USERNAME/$DEPLOY_REPO:app-$DEPLOY_TAG
 
           cd app/
           echo "Building $IMAGE_TAG"
           docker build . -t $IMAGE_TAG -f Dockerfile.prod
+
+          echo "Pushing to the docker hub"
+          docker push $IMAGE_TAG
+
+          echo "The image was successfully pushed"
+      - name: Publish nginx
+        run: |
+
+          echo "Login to docker hub"
+          docker login --username "$DEPLOY_USERNAME" -p "$DEPLOY_TOKEN"
+
+          # $GITHUB_REF is in the form of 'refs/tags/<tag>'
+          DEPLOY_TAG=$(echo "$GITHUB_REF" | awk -F "/" '{print($3)}')
+          IMAGE_TAG=$DEPLOY_USERNAME/$DEPLOY_REPO:nginx-$DEPLOY_TAG
+
+          cd nginx/
+          echo "Building $IMAGE_TAG"
+          docker build . -t $IMAGE_TAG
 
           echo "Pushing to the docker hub"
           docker push $IMAGE_TAG
