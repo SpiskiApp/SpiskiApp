@@ -21,6 +21,15 @@ services:
       - POSTGRES_USER=spiski_user
       - POSTGRES_PASSWORD=spiski_dev
       - POSTGRES_DB=spiski_dev
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/home/app/web/static
+    ports:
+      - 80:80
+    depends_on:
+      - web
 
 volumes:
   postgres_data:
+  static_volume:
