@@ -31,13 +31,6 @@ class Command(BaseCommand):
             prison = Prison.objects.get(name=options["prison"])
         else:
             prison = None
-        list_ = List.objects.create(
-            date=options["date"],
-            prison=prison,
-            text=options["text"],
-            origin=options["origin"],
-        )
-        print("Created list", list_)
 
         if options["csv"] is not None:
             file_path = options["csv"]
@@ -45,13 +38,25 @@ class Command(BaseCommand):
 
             with open(file_path) as fin:
                 reader = csv.DictReader(fin, delimiter=options["csv_delimiter"])
-                for record in reader:
-                    print("Processing row", record)
-                    items.append(
-                        ListItem(
-                            list=list_,
-                            **record,
-                        )
+                csv_items = [record for record in reader]
+                original_text = "".join(fin.readlines())
+
+            list_ = List.objects.create(
+                date=options["date"],
+                prison=prison,
+                text=original_text,
+                origin=options["origin"],
+                metadata={"import_type": "csv"},
+            )
+            print("Created list", list_)
+
+            for record in csv_items:
+                print("Processing row", record)
+                items.append(
+                    ListItem(
+                        list=list_,
+                        **record,
                     )
+                )
 
             ListItem.objects.bulk_create(items)

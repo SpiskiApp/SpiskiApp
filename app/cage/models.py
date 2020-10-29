@@ -60,7 +60,7 @@ class Imprisonment(models.Model):
 
 
 class List(models.Model):
-    date = models.DateTimeField(null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
     prison = models.ForeignKey(Prison, models.SET_NULL, null=True, blank=True)
     text = models.TextField()
     origin = models.TextField()

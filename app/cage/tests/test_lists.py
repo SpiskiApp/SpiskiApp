@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from cage.models import List, ListItem, Prison
 from django.test import TestCase
@@ -33,7 +33,7 @@ class ImportListViewTests(TestCase):
         empty_list = {
             "text": "list test",
             "origin": "list origin",
-            "date": datetime.now().isoformat(),
+            "date": str(datetime.now().date()),
             "metadata": {"key": "value"},
         }
 
@@ -49,8 +49,8 @@ class ImportListViewTests(TestCase):
         self.assertEqual(imported_list.text, empty_list["text"])
         self.assertEqual(imported_list.origin, empty_list["origin"])
         self.assertEqual(
-            imported_list.date.timestamp(),
-            datetime.fromisoformat(empty_list["date"]).timestamp(),
+            imported_list.date,
+            date.fromisoformat(empty_list["date"]),
         )
         self.assertEqual(imported_list.metadata, empty_list["metadata"])
         self.assertIsNone(imported_list.prison)
