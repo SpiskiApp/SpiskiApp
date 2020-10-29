@@ -38,7 +38,7 @@ class PostAppPipeline:
         if not response.ok:
             msg = response.reason
             if response.headers['content-type'] == 'application/json':
-                msg += response.json()
+                msg += str(response.json())
             logger.error(msg)
         else:
             logger.info(f'Set the list {payload} to app: {response.status_code} {response.reason}')
