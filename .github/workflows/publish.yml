@@ -24,7 +24,7 @@ jobs:
           docker login --username "$DEPLOY_USERNAME" -p "$DEPLOY_TOKEN"
 
           # $GITHUB_REF is in the form of 'refs/tags/<tag>'
-          DEPLOY_TAG=$(echo "$GITHUB_REF" | awk -F "/" '{print($3)}')
+          DEPLOY_TAG=${GITHUB_REF##*/}
           IMAGE_TAG=$DEPLOY_USERNAME/$DEPLOY_REPO:app-$DEPLOY_TAG
 
           cd app/
@@ -42,7 +42,7 @@ jobs:
           docker login --username "$DEPLOY_USERNAME" -p "$DEPLOY_TOKEN"
 
           # $GITHUB_REF is in the form of 'refs/tags/<tag>'
-          DEPLOY_TAG=$(echo "$GITHUB_REF" | awk -F "/" '{print($3)}')
+          DEPLOY_TAG=${GITHUB_REF##*/}
           IMAGE_TAG=$DEPLOY_USERNAME/$DEPLOY_REPO:nginx-$DEPLOY_TAG
 
           cd nginx/
@@ -53,3 +53,18 @@ jobs:
           docker push $IMAGE_TAG
 
           echo "The image was successfully pushed"
+      - name: Publish worker
+        run: |
+
+          echo "Login to docker hub"
+          docker login --username "$DEPLOY_USERNAME" -p "$DEPLOY_TOKEN"
+
+          cd worker
+
+          DEPLOY_TAG=${GITHUB_REF##*/}
+          IMAGE_TAG=$DEPLOY_USERNAME/$DEPLOY_REPO:worker-$DEPLOY_TAG
+          echo "Building $IMAGE_TAG"
+          docker build . -t $IMAGE_TAG
+
+          echo "Pushing to the docker hub"
+          docker push $IMAGE_TAG
