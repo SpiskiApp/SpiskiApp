@@ -54,7 +54,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Build
+      - name: Build app
         run: |
           docker-compose -f docker-compose.yml up -d web nginx
 
@@ -73,3 +73,6 @@ jobs:
 
           echo "Couldn't start within 4s"
           exit 1
+      - name: Build worker
+        run: |
+          docker-compose -f docker-compose.yml build worker
