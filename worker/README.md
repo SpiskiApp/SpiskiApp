@@ -15,4 +15,4 @@
 
 Supported crawlers: `viasna`.
 
-    scrapy crawl viasna -s APP_POST_URL=<app_host>/api/v1/cage/inmates/
+    scrapy crawl viasna -s APP_POST_URL=<app_host>/api/v1/cage/lists/ -a url=http://spring96.org/ru/news/99708 -a date=09.08.2020
