@@ -19,3 +19,9 @@ class HumanInfo(scrapy.Item):
     city = scrapy.Field()
     place = scrapy.Field()
     comments = scrapy.Field()
+
+
+class ListInfo(scrapy.Item):
+    origin = scrapy.Field()
+    date = scrapy.Field()
+    items = scrapy.Field()

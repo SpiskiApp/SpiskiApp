@@ -10,26 +10,41 @@ class PostAppPipeline:
     def __init__(self, url: str) -> None:
         self.url = url
 
-    def process_item(self, item, spider):
+    def process_item(self, list_info, spider):
         payload = {
-            'first_name': item.get('first_name', 'Unknown'),
-            'last_name': item['last_name'],
-            'patronymic': item.get('patronymic', 'Unknown'),
-            'birth_date': item.get('birth_date', '2020-01-01'),
-            'metadata': {},
+            'items': [],
+            'text': spider.page_url,
+            'origin': list_info['origin'],
+            'date': list_info['date'].isoformat(),
         }
-        if 'city' in item:
-            payload['metadata']['city'] = item['city']
-        if 'place' in item:
-            payload['metadata']['place'] = item['place']
-        if 'comments' in item:
-            payload['metadata']['comments'] = item['comments']
+        for item in list_info['items']:
+            item_payload = {
+                'first_name': item.get('first_name', 'Unknown'),
+                'last_name': item['last_name'],
+                'patronymic': item.get('patronymic', 'Unknown'),
+                'birth_date': item.get('birth_date', '2020-01-01'),
+                'metadata': {},
+            }
+            if 'city' in item:
+                item_payload['metadata']['city'] = item['city']
+            if 'place' in item:
+                item_payload['metadata']['place'] = item['place']
+            if 'comments' in item:
+                item_payload['metadata']['comments'] = item['comments']
 
-        response = requests.post(self.url, json=[payload], headers={'Content-Type': 'application/json'})
+            payload['items'].append(item_payload)
 
-        logger.info(f'Set item {item} to app: {response.status_code} {response.reason}')
+        response = requests.post(self.url, json=payload, headers={'Content-Type': 'application/json'})
 
-        return item
+        if not response.ok:
+            msg = response.reason
+            if response.headers['content-type'] == 'application/json':
+                msg += response.json()
+            logger.error(msg)
+        else:
+            logger.info(f'Set the list {payload} to app: {response.status_code} {response.reason}')
+
+        return list_info
 
     @classmethod
     def from_crawler(cls, crawler: Crawler) -> 'PostAppPipeline':
