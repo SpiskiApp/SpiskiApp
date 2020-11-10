@@ -5,7 +5,7 @@ from django.db import models
 class Inmate(models.Model):
     first_name = models.TextField()
     last_name = models.TextField()
-    patronymic = models.TextField(null=True)
+    patronymic = models.TextField(blank=True)
     birth_date = models.DateField()
     metadata = models.JSONField(default=dict)
 
@@ -77,6 +77,7 @@ class ListItem(models.Model):
     patronymic = models.TextField(blank=True)
     birth_date = models.DateField(blank=True, null=True)
     inmate = models.ForeignKey(Inmate, models.SET_NULL, null=True, blank=True)
+    comments = models.TextField(blank=True, null=True)
     # TODO should be discrete for simplicity
     match_confidence = models.FloatField(null=True, blank=True)
 
