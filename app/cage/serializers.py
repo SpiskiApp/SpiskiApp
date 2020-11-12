@@ -1,5 +1,9 @@
 from cage.models import Inmate, List, ListItem, Prison
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import (
+    ModelSerializer,
+    Serializer,
+    SerializerMethodField,
+)
 
 
 class InmateSerializer(ModelSerializer):
@@ -11,7 +15,7 @@ class InmateSerializer(ModelSerializer):
 class ListItemSerializer(ModelSerializer):
     class Meta:
         model = ListItem
-        exclude = ["id", "list"]
+        fields = ["first_name", "last_name", "patronymic", "birth_date", "comments"]
 
 
 class ListSerializer(ModelSerializer):
@@ -35,3 +39,22 @@ class PrisonSerializer(ModelSerializer):
     class Meta:
         model = Prison
         fields = "__all__"
+
+
+class SearchResultSerializer(Serializer):
+    type = SerializerMethodField()
+    object = SerializerMethodField()
+
+    def get_type(self, obj) -> str:
+        if isinstance(obj, Inmate):
+            return "inmate"
+        elif isinstance(obj, ListItem):
+            return "list_item"
+        return "unknown"
+
+    def get_object(self, obj) -> dict:
+        if isinstance(obj, Inmate):
+            return InmateSerializer(obj).data
+        elif isinstance(obj, ListItem):
+            return ListItemSerializer(obj).data
+        return {}

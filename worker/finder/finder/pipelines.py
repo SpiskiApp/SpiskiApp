@@ -22,7 +22,6 @@ class PostAppPipeline:
                 'first_name': item.get('first_name', 'Unknown'),
                 'last_name': item['last_name'],
                 'patronymic': item.get('patronymic', 'Unknown'),
-                'metadata': {},
             }
             if 'city' in item:
                 item_payload['metadata']['city'] = item['city']
